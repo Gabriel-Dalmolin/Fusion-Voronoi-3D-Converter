@@ -1,7 +1,7 @@
 """This file acts as the main module for this script."""
 
-from re import A
 import traceback
+
 import adsk.core
 import adsk.fusion
 # import adsk.cam
@@ -19,21 +19,21 @@ if not design:
 else:
     root = design.rootComponent
 
-def createBox():
+def createBox(x, y, z):
     plane = root.xYConstructionPlane
     sketch = root.sketches.add(plane)
 
     lines = sketch.sketchCurves.sketchLines
 
     p1 = adsk.core.Point3D.create(0,0,0)
-    p2 = adsk.core.Point3D.create(5,5,0)
+    p2 = adsk.core.Point3D.create(x,y,0)
 
     lines.addTwoPointRectangle(p1, p2)
 
     profile = sketch.profiles.item(0)
 
     extrudes = root.features.extrudeFeatures
-    distance = adsk.core.ValueInput.createByReal(2)
+    distance = adsk.core.ValueInput.createByReal(z)
 
     extrudeInput = extrudes.createInput(
         profile,
@@ -48,23 +48,42 @@ def createBox():
 
     extrudes.add(extrudeInput)
 
+class DestroyHandler(adsk.core.CommandEventHandler):
+    def notify(self, eventArgs: adsk.core.CommandEventArgs) -> None:
+        adsk.terminate()
+
 class ExecuteHandler(adsk.core.CommandEventHandler):
     def notify(self, args: adsk.core.CommandEventArgs) -> None:
         command = args.command
         inputs = command.commandInputs
 
-        widthInput = adsk.core.ValueCommandInput.cast(inputs.itemById("width"))
-        width = widthInput.value
+        x = int(adsk.core.ValueCommandInput.cast(inputs.itemById("x")).value)
+        y = int(adsk.core.ValueCommandInput.cast(inputs.itemById("y")).value)
+        z = int(adsk.core.ValueCommandInput.cast(inputs.itemById("z")).value)
+        
+        createBox(x,y,z)
 
-class UICommand(adsk.core.CommandCreatedEventHandler):
+class CommandHandler(adsk.core.CommandCreatedEventHandler):
     def notify(self, args: adsk.core.CommandCreatedEventArgs) -> None:
         command = args.command
 
         inputs = command.commandInputs
 
         inputs.addValueInput(
-            "width",
-            "Width",
+            "x",
+            "Size in X (mm)",
+            "mm",
+            adsk.core.ValueInput.createByString("50 mm")
+        )
+        inputs.addValueInput(
+            "y",
+            "Size in Y (mm)",
+            "mm",
+            adsk.core.ValueInput.createByString("50 mm")
+        )
+        inputs.addValueInput(
+            "z",
+            "Size in Z (mm)",
             "mm",
             adsk.core.ValueInput.createByString("50 mm")
         )
@@ -73,15 +92,21 @@ class UICommand(adsk.core.CommandCreatedEventHandler):
         command.execute.add(executeHandler)
         handlers.append(executeHandler)
 
+        destroyHandler = DestroyHandler()
+        command.destroy.add(destroyHandler)
+        handlers.append(destroyHandler)
+
 
 def get_input():
-    cmdDef = ui.commandDefinitions.addButtonDefinition(
-        "MyCommand",
-        "My Command",
-        "Creates my command"
-    )
+    cmdDef = ui.commandDefinitions.itemById("Voronoi_converter")
+    if not cmdDef:
+        cmdDef = ui.commandDefinitions.addButtonDefinition(
+            "Voronoi_converter",
+            "Voronoi Converter",
+            "Convert a body to a 3D voronoi structure"
+        )
 
-    handler = UICommand()
+    handler = CommandHandler()
     cmdDef.commandCreated.add(handler)
     handlers.append(handler)
 
