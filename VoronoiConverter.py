@@ -6,6 +6,7 @@ import adsk.core
 import adsk.fusion
 
 from .handlers import CommandHandler
+from .utils import download_requirements
 
 import sys
 
@@ -20,7 +21,7 @@ if not design:
 else:
     root = design.rootComponent
 
-def get_input():
+def create_voronoi():
     app.log(sys.executable)
     app.log(sys.version)
 
@@ -43,9 +44,10 @@ def get_input():
 
 def main():
     app.log(u'TextCommandWindow.Clear')
+    download_requirements()
     adsk.autoTerminate(False)
 
-    get_input()
+    create_voronoi()
 
 def run(_context: str):
     """This function is called by Fusion when the script is run."""
