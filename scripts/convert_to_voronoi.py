@@ -11,7 +11,6 @@ from .intersect_bodies import intersect_bodies
 from .get_random_seeds import get_random_seeds
 from .gen_ghost_points import gen_ghost_points
 from .get_voronoi_edges import get_voronoi_edges
-from .revolve_vertex import revolve_vertex
 from .create_wireframe import create_wireframe
 from .sweep_voronoi_edges import sweep_voronoi_edges
 from .create_face_connections import create_face_connections
@@ -21,7 +20,9 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
         bodies = adsk.core.ObjectCollection.create()
         seeds = []
 
-        wireframe, vertices = create_wireframe(root, body, radius)
+        wireframe_bodies, vertices = create_wireframe(root, body, radius)
+        for b in wireframe_bodies:
+            bodies.add(b)
 
         seeds += get_random_seeds(body, n_seeds)
 
@@ -41,13 +42,15 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
         v_edges = sweep_voronoi_edges(root, bodies, edges, radius)
 
         obj_collection = adsk.core.ObjectCollection.create()
-        obj_collection.add(wireframe)
         obj_collection.add(v_edges)
         for b in bodies:
             obj_collection.add(b)
+
+        target = adsk.fusion.BRepBody.cast(obj_collection.item(0))
+
         combine_bodies(root, obj_collection)
 
-        intersect_bodies(root, wireframe, body)
+        intersect_bodies(root, target, body)
 
     except:
         adsk.core.Application.get().log(traceback.format_exc())

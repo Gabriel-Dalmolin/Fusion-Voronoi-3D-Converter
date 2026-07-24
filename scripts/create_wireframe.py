@@ -28,6 +28,4 @@ def create_wireframe(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, ra
     create_edges(root, body, radius)
     create_vertices(root, body, radius)        
 
-    b1 = combine_bodies(root, bodies)
-
-    return b1, seeds
+    return bodies, seeds
