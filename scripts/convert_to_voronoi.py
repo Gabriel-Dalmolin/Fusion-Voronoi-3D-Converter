@@ -6,14 +6,15 @@ import scipy.spatial
 import adsk.core
 import adsk.fusion
 
-from .combine_bodies import combine_bodies
-from .intersect_bodies import intersect_bodies
-from .get_random_seeds import get_random_seeds
-from .gen_ghost_points import gen_ghost_points
-from .get_voronoi_edges import get_voronoi_edges
-from .create_wireframe import create_wireframe
-from .sweep_voronoi_edges import sweep_voronoi_edges
-from .create_face_connections import create_face_connections
+from .math.gen_mirrored_ghost_points import gen_mirrored_ghost_points
+from .math.get_random_seeds import get_random_seeds
+from .math.gen_ghost_points import gen_ghost_points
+from .math.get_voronoi_edges import get_voronoi_edges
+from .fusionManipulation.combine_bodies import combine_bodies
+from .fusionManipulation.intersect_bodies import intersect_bodies
+from .fusionManipulation.create_wireframe import create_wireframe
+from .fusionManipulation.sweep_voronoi_edges import sweep_voronoi_edges
+from .fusionManipulation.create_face_connections import create_face_connections
 
 def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, radius, n_seeds):
     try: 
@@ -28,7 +29,9 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
 
         ghost_index = len(seeds)
 
-        seeds += gen_ghost_points(body)
+        bBox = body.boundingBox
+        seeds += gen_mirrored_ghost_points(seeds, bBox)
+        # seeds += gen_ghost_points(body)
 
         # for s in seeds:   # Used for visualizing the seeds
         #     vertex = adsk.core.Point3D.create(s[0], s[1], s[2])
@@ -38,7 +41,7 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
 
         interceptions, edges = get_voronoi_edges(body, voronoi, ghost_index)
         adsk.core.Application.get().log(str(len(interceptions)))
-        create_face_connections(root, bodies, interceptions, radius)
+        # create_face_connections(root, bodies, interceptions, radius)
         v_edges = sweep_voronoi_edges(root, bodies, edges, radius)
 
         obj_collection = adsk.core.ObjectCollection.create()

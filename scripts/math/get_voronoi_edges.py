@@ -45,8 +45,6 @@ def get_voronoi_edges(body, voronoi: scipy.spatial.Voronoi, ghost_index) -> tupl
     vertices = voronoi.vertices
     d = voronoi.ridge_dict
 
-    
-
     for k in d:
         a = k[0]
         b = k[1]

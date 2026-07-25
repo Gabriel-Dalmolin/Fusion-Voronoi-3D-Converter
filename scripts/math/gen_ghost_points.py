@@ -15,7 +15,7 @@ def gen_regular_points(min_p, max_p, dx, mx, nx, dy, my, ny, dz, mz, nz):
             p = [max_p.x + mx, min_p.y + (i+1)*dy/(ny+1), min_p.z + (j+1)*dz/(nz+1)]
             n = [min_p.x - mx, min_p.y + (i+1)*dy/(ny+1), min_p.z + (j+1)*dz/(nz+1)]
             seeds.append(p) # i and j gets added 1 so that we dont multiply by 0 and 
-            seeds.append(n) # one of the points stay on top of the wireframe
+            seeds.append(n) # one of the points gets on top of the wireframe
 
     for i in range(nx):  
         for j in range(nz):

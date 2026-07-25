@@ -1,5 +1,7 @@
 import random
 
+from scipy.stats import qmc
+
 import adsk.core
 import adsk.fusion
 
