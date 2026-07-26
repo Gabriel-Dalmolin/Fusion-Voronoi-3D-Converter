@@ -30,7 +30,7 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
         ghost_index = len(seeds)
 
         bBox = body.boundingBox
-        seeds += gen_mirrored_ghost_points(seeds, bBox)
+        seeds += gen_mirrored_ghost_points(seeds, body)
         # seeds += gen_ghost_points(body)
 
         # for s in seeds:   # Used for visualizing the seeds
