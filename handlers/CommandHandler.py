@@ -27,18 +27,26 @@ class CommandHandler(adsk.core.CommandCreatedEventHandler):
 
         inputs.addValueInput(
             "radius",
-            "Radius of connections (mm)",
+            "Radius of connections",
             "mm",
             adsk.core.ValueInput.createByString("1 mm")
         )
 
         inputs.addIntegerSpinnerCommandInput(
-            "seeds",
-            "Number of seeds",
+            "size",
+            "Cell size as percentage of bounding box size",
             0,
-            1000,
-            1, 
-            5
+            95,
+            1,
+            40
+        )
+
+        inputs.addBoolValueInput(
+            "lloyd",
+            "Lloyd's relaxation",
+            True,
+            "",
+            True
         )
 
         executeHandler = ExecuteHandler(self.root)

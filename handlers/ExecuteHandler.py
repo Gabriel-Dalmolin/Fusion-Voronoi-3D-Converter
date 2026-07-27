@@ -19,6 +19,8 @@ class ExecuteHandler(adsk.core.CommandEventHandler):
 
         radius = float(adsk.core.ValueCommandInput.cast(inputs.itemById("radius")).value)
 
-        n_seeds = int(adsk.core.IntegerSpinnerCommandInput.cast(inputs.itemById("seeds")).value)
+        size = float(adsk.core.IntegerSpinnerCommandInput.cast(inputs.itemById("size")).value)
+
+        lloyd = bool(adsk.core.BoolValueCommandInput.cast(inputs.itemById("lloyd")).value)
         
-        convert_to_voronoi(self.root, body, radius, n_seeds)
+        convert_to_voronoi(self.root, body, radius, size, lloyd)

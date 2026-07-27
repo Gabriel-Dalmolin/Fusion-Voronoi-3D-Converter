@@ -16,7 +16,7 @@ from .fusionManipulation.create_wireframe import create_wireframe
 from .fusionManipulation.sweep_voronoi_edges import sweep_voronoi_edges
 from .fusionManipulation.create_face_connections import create_face_connections
 
-def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, radius, n_seeds):
+def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, radius, size, lloyd):
     try: 
         bodies = adsk.core.ObjectCollection.create()
         seeds = []
@@ -25,11 +25,10 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
         for b in wireframe_bodies:
             bodies.add(b)
 
-        seeds += get_random_seeds(body, n_seeds)
+        seeds += get_random_seeds(body, size, lloyd)
 
         ghost_index = len(seeds)
 
-        bBox = body.boundingBox
         seeds += gen_mirrored_ghost_points(seeds, body)
         # seeds += gen_ghost_points(body)
 
@@ -37,7 +36,7 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
         #     vertex = adsk.core.Point3D.create(s[0], s[1], s[2])
         #     revolve_vertex(root, radius, vertex, bodies)
 
-        voronoi = scipy.spatial.Voronoi(seeds + vertices)
+        voronoi = scipy.spatial.Voronoi(seeds)
 
         interceptions, edges = get_voronoi_edges(body, voronoi, ghost_index)
         adsk.core.Application.get().log(str(len(interceptions)))
