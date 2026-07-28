@@ -7,8 +7,6 @@ import adsk.core
 import adsk.fusion
 
 def get_random_seeds(body: adsk.fusion.BRepBody, radius, lloyd):
-    app = adsk.core.Application.get()
-
     seeds = []
 
     bbox = body.boundingBox
@@ -27,11 +25,7 @@ def get_random_seeds(body: adsk.fusion.BRepBody, radius, lloyd):
         d=3,
         radius=n_radius,
         optimization=opt)
-
-    app.log(str(dx) + "/" + str(dy) + "/" + str(dz))
-    app.log(str(radius))
-    app.log(str(n_radius))
-
+    
     samples = poisson.fill_space()
 
     for s in samples:
@@ -43,5 +37,4 @@ def get_random_seeds(body: adsk.fusion.BRepBody, radius, lloyd):
         if body.pointContainment(p) == adsk.fusion.PointContainment.PointInsidePointContainment:
             seeds.append(p.asArray())
 
-    app.log(str(seeds))
     return seeds

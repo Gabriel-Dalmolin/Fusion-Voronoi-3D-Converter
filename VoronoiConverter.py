@@ -22,9 +22,6 @@ else:
     root = design.rootComponent
 
 def create_voronoi():
-    app.log(sys.executable)
-    app.log(sys.version)
-
     baseFeature = root.features.baseFeatures.add()
     baseFeature.startEdit()
 
@@ -50,10 +47,7 @@ def main():
     create_voronoi()
 
 def run(_context: str):
-    """This function is called by Fusion when the script is run."""
-
     try:
         main()
     except:  #pylint:disable=bare-except
         app.log(f'Failed:\n{traceback.format_exc()}')
-        

@@ -18,6 +18,8 @@ from .fusionManipulation.create_face_connections import create_face_connections
 
 def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, radius, size, lloyd):
     try: 
+        app = adsk.core.Application.get()
+
         bodies = adsk.core.ObjectCollection.create()
         seeds = []
 
@@ -38,9 +40,11 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
 
         voronoi = scipy.spatial.Voronoi(seeds)
 
+        app.log("Getting voronoi edges")
         interceptions, edges = get_voronoi_edges(body, voronoi, ghost_index)
-        adsk.core.Application.get().log(str(len(interceptions)))
+        
         # create_face_connections(root, bodies, interceptions, radius)
+        app.log("Sweeping edges")
         v_edges = sweep_voronoi_edges(root, bodies, edges, radius)
 
         obj_collection = adsk.core.ObjectCollection.create()
@@ -50,8 +54,10 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
 
         target = adsk.fusion.BRepBody.cast(obj_collection.item(0))
 
+        app.log("Combining bodies")
         combine_bodies(root, obj_collection)
 
+        app.log("Intersecting bodies")
         intersect_bodies(root, target, body)
 
     except:
