@@ -24,10 +24,12 @@ Also expect it to take some time to convert your body, specially if you make it 
 
 ## Showcase
 
-Before:
+### Before:
+
 ![Before image](before.png)
 
-After:
+### After:
+
 ![After image](after.png)
 
 ## License
