@@ -2,7 +2,7 @@
 
 **Last updated:** July 29, 2026
 
-This Privacy Policy describes how **Voronoi Converter** ("the App") handles user data.
+This Privacy Policy describes how **3D Voronoi Converter** handles user data.
 
 ## Overview
 
@@ -62,6 +62,6 @@ If you have any questions regarding this Privacy Policy, please contact:
 
 **Gabriel Dalmolin**
 
-GitHub: https://github.com/YOUR_USERNAME
+GitHub: https://github.com/Gabriel-Dalmolin
 
-Repository: https://github.com/YOUR_USERNAME/VoronoiConverter
+Repository: https://github.com/Gabriel-Dalmolin/Fusion-Voronoi-3D-Converter
