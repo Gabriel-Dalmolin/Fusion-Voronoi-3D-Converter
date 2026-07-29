@@ -16,6 +16,10 @@ A Python script for fusion360 that transforms an existing solid body into a thre
 
 Now that the script is already installed, open "Scripts and add-ins" tab either by pressing (shift + s) or following the same steps as the installation until you have the tab opened. Look for the script "VoronoiConverter" and click on the sideways triangle to run it.
 
+## Notes
+
+The current script works better with geometric models. Support for highly organic or rounded shapes is planned for future updates.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

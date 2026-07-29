@@ -32,18 +32,20 @@ def combine_bodies(root, bodies: adsk.core.ObjectCollection):
                                             b2_copy,
                                             adsk.fusion.BooleanTypes.IntersectionBooleanType) #type: ignore
 
-                if success and b1_copy.volume >= 0.0001:
+                if success and b1_copy.volume > 0:
                     objCollection = adsk.core.ObjectCollection.create()
                     objCollection.add(body)
                     bodies.removeByItem(body)
 
                     combineInput = combines.createInput(b1, objCollection) 
+                    combineInput.isKeepToolBodies = False
                     combineInput.operation = adsk.fusion.FeatureOperations.JoinFeatureOperation # type: ignore
                     combines.add(combineInput)
 
                     ran_without_adding = 0
-            except:
-                adsk.core.Application.get().log(traceback.format_exc())
+            except Exception:
+                bodies.removeByItem(body)
+                body.deleteMe()
                 pass
 
         i += 1

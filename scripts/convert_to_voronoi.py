@@ -45,10 +45,9 @@ def convert_to_voronoi(root: adsk.fusion.Component, body: adsk.fusion.BRepBody, 
         
         # create_face_connections(root, bodies, interceptions, radius)
         app.log("Sweeping edges")
-        v_edges = sweep_voronoi_edges(root, bodies, edges, radius)
+        sweep_voronoi_edges(root, bodies, edges, radius)
 
         obj_collection = adsk.core.ObjectCollection.create()
-        obj_collection.add(v_edges)
         for b in bodies:
             obj_collection.add(b)
 
