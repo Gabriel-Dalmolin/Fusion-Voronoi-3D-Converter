@@ -32,6 +32,8 @@ Also expect it to take some time to convert your body, specially if you make it 
 
 ![After image](after.png)
 
+[Here is a 3D viewer of the part after the script was run](https://a360.co/4vZYWOO)
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
