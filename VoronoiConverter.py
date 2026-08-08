@@ -5,8 +5,7 @@ import traceback
 import adsk.core
 import adsk.fusion
 
-from .handlers import CommandHandler
-from .utils import download_requirements
+from .utils.download_requirements import download_requirements
 
 import sys
 
@@ -14,7 +13,7 @@ app = adsk.core.Application.get()
 ui  = app.userInterface
 design = adsk.fusion.Design.cast(app.activeProduct)
 
-handlers = []
+_handlers = []
 
 if not design:
     print("No Fusion design is active.")
@@ -22,6 +21,8 @@ else:
     root = design.rootComponent
 
 def create_voronoi():
+    from .handlers import CommandHandler
+
     baseFeature = root.features.baseFeatures.add()
     baseFeature.startEdit()
 
@@ -33,9 +34,9 @@ def create_voronoi():
             "Convert a body to a 3D voronoi structure"
         )
 
-    handler = CommandHandler(handlers, root, baseFeature)
+    handler = CommandHandler(_handlers, root, baseFeature)
     cmdDef.commandCreated.add(handler)
-    handlers.append(handler)
+    _handlers.append(handler)
 
     cmdDef.execute()
 
